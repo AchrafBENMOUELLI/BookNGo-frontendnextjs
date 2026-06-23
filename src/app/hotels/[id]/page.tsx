@@ -67,8 +67,16 @@ export default function HotelDetailPage() {
       {photos.length > 1 && (
         <div className="flex gap-2 mb-8 overflow-x-auto">
           {photos.slice(1).map((photo, i) => (
-            <div key={i} className="relative h-20 w-32 shrink-0 rounded-lg overflow-hidden">
-              <Image src={photo} alt={`${hotel.nom} ${i + 2}`} fill className="object-cover" />
+            <div
+              key={i}
+              className="relative h-20 w-32 shrink-0 rounded-lg overflow-hidden"
+            >
+              <Image
+                src={photo}
+                alt={`${hotel.nom} ${i + 2}`}
+                fill
+                className="object-cover"
+              />
             </div>
           ))}
         </div>
@@ -92,7 +100,7 @@ export default function HotelDetailPage() {
           </div>
           <Badge className="bg-yellow-50 text-yellow-700 border-yellow-200 gap-1 shrink-0">
             <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-            {hotel.categorie} étoiles
+            {"⭐".repeat(Number(hotel.categorie))}
           </Badge>
         </div>
 
@@ -101,13 +109,33 @@ export default function HotelDetailPage() {
           <div>
             <h2 className="font-semibold text-lg mb-3">Formules disponibles</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {hotel.formules.map((formule) => (
-                <div key={formule.id} className="border rounded-lg p-4 space-y-1">
-                  <p className="font-medium">{formule.nom}</p>
-                  {formule.description && (
-                    <p className="text-sm text-muted-foreground">{formule.description}</p>
+              {hotel.formules.map((f) => (
+                <div key={f.id} className="border rounded-lg p-4 space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium">{f.formule}</p>
+                    {f.promotion && f.promotion > 0 && (
+                      <Badge className="bg-green-100 text-green-700">
+                        -{f.promotion}%
+                      </Badge>
+                    )}
+                  </div>
+                  {f.type_chambre && (
+                    <p className="text-sm text-muted-foreground">{f.type_chambre}</p>
                   )}
-                  <p className="text-primary font-bold">{formule.prix} TND</p>
+                  <div className="flex items-center gap-2">
+                    {f.promotion && f.promotion > 0 ? (
+                      <>
+                        <p className="text-sm line-through text-muted-foreground">
+                          {f.prix_formule} TND
+                        </p>
+                        <p className="text-primary font-bold">
+                          {f.prix_avec_promotion} TND
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-primary font-bold">{f.prix_formule} TND</p>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
