@@ -10,7 +10,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <span className="text-xl font-bold text-primary tracking-tight">
-              Tunisia<span className="text-orange-500">Book</span>
+              Tunisie<span className="text-orange-500">Booking</span>
             </span>
           </Link>
 

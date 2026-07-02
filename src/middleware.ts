@@ -1,28 +1,39 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Routes that require authentication
 const protectedRoutes = ["/my-reservations", "/hotels/:id/reserve"];
-
-// Routes that logged-in users shouldn't access
 const authRoutes = ["/login", "/register"];
+const adminPublicRoutes = ["/admin/login"];
 
 export function middleware(request: NextRequest) {
   const token = request.cookies.get("token")?.value;
+  const adminToken = request.cookies.get("admin_token")?.value;
   const { pathname } = request.nextUrl;
 
+  // ── Admin routes ──────────────────────────────────────
+  const isAdminPublic = adminPublicRoutes.includes(pathname);
+  const isAdminRoute = pathname.startsWith("/admin");
+
+  // Admin already logged in → redirect away from login
+  if (isAdminPublic && adminToken) {
+    return NextResponse.redirect(new URL("/admin", request.url));
+  }
+
+  // Admin route but no token → redirect to admin login
+  if (isAdminRoute && !isAdminPublic && !adminToken) {
+    return NextResponse.redirect(new URL("/admin/login", request.url));
+  }
+
+  // ── Regular user routes ───────────────────────────────
   const isProtected = protectedRoutes.some((route) =>
     pathname.startsWith(route.replace(":id", ""))
   );
-
   const isAuthRoute = authRoutes.includes(pathname);
 
-  // Not logged in trying to access protected page → redirect to login
   if (isProtected && !token) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Already logged in trying to access login/register → redirect to home
   if (isAuthRoute && token) {
     return NextResponse.redirect(new URL("/", request.url));
   }
@@ -31,5 +42,11 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/my-reservations/:path*", "/hotels/:path*/reserve", "/login", "/register"],
+  matcher: [
+    "/admin/:path*",
+    "/my-reservations/:path*",
+    "/hotels/:path*/reserve",
+    "/login",
+    "/register",
+  ],
 };

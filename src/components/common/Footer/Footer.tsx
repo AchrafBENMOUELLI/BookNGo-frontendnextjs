@@ -8,7 +8,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <span className="text-lg font-bold text-primary">
-              Tunisia<span className="text-orange-500">Book</span>
+              Tunisie<span className="text-orange-500">Booking</span>
             </span>
             <p className="mt-2 text-sm text-muted-foreground">
               Discover and book the best hotels across Tunisia.
@@ -37,7 +37,7 @@ export function Footer() {
         </div>
 
         <div className="mt-8 pt-6 border-t text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} TunisiaBook. All rights reserved.
+          © {new Date().getFullYear()} TunisieBooking. All rights reserved.
         </div>
       </div>
     </footer>
