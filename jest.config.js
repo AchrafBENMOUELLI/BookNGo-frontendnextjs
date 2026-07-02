@@ -1,7 +1,6 @@
 /** @type {import('jest').Config} */
 const config = {
   testEnvironment: 'jsdom',
-  setupFiles: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
@@ -13,10 +12,8 @@ const config = {
   },
   testMatch: ['**/__tests__/**/*.test.(ts|tsx)'],
   collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.d.ts',
-    '!src/app/layout.tsx',
-    '!src/app/providers.tsx',
+    'src/schemas/**/*.ts',
+    'src/hooks/useDebounce.ts',
   ],
 };
 

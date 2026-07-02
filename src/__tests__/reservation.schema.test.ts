@@ -1,4 +1,5 @@
 import { reservationFormSchema } from '@/schemas/reservation.schema';
+import '@testing-library/jest-dom';
 
 describe('reservationFormSchema', () => {
   it('validates correct reservation data', () => {

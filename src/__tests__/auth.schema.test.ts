@@ -1,4 +1,5 @@
 import { loginSchema, registerSchema } from '@/schemas/auth.schema';
+import '@testing-library/jest-dom';
 
 describe('loginSchema', () => {
   it('validates correct login data', () => {
