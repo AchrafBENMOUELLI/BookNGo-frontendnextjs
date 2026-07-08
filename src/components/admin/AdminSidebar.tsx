@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAdminStore } from "@/stores/admin.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 import { LayoutDashboard, Hotel, CalendarCheck, Users, LogOut, Hexagon } from "lucide-react";
@@ -71,7 +72,7 @@ export function AdminSidebar() {
           </div>
         </div>
         <button
-          onClick={() => { clearAuth(); router.push("/admin/login"); }}
+          onClick={() => { useAuthStore.getState().clearAuth(); clearAuth(); router.push("/admin/login"); }}
           className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-zinc-500 hover:text-red-400 hover:bg-red-500/10 transition-all w-full"
         >
           <LogOut className="w-4 h-4" />

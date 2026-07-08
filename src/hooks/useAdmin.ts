@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { adminService } from "@/services/admin.service";
 import { useAdminStore } from "@/stores/admin.store";
+import { useAuthStore } from "@/stores/auth.store";
 import { useRouter } from "next/navigation";
 
 export function useAdminLogin() {
@@ -12,6 +13,7 @@ export function useAdminLogin() {
       adminService.login(email, password),
     onSuccess: (res) => {
       if (res.user.role !== "admin") throw new Error("Not an admin");
+      useAuthStore.getState().clearAuth();
       setAuth(res.user, res.token);
       router.push("/admin");
     },
