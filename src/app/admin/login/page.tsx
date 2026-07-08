@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { useAdminLogin } from "@/hooks/useAdmin";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Shield } from "lucide-react";
+import { Hexagon, Loader2, Eye, EyeOff } from "lucide-react";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
   const { mutate: login, isPending, error } = useAdminLogin();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -17,58 +17,70 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-      <div className="w-full max-w-md">
-        {/* Logo */}
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-500 rounded-2xl mb-4 shadow-lg shadow-orange-500/30">
-            <Shield className="w-8 h-8 text-white" />
+          <div className="w-12 h-12 rounded-lg bg-indigo-500 flex items-center justify-center mx-auto mb-4">
+            <Hexagon className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-white">
-            Tunisia<span className="text-orange-500">Book</span>
-          </h1>
-          <p className="text-gray-500 text-sm mt-1">Panneau d'administration</p>
+          <h1 className="text-lg font-bold text-zinc-100">BookNGo</h1>
+          <p className="text-sm text-zinc-500 mt-1">Administration</p>
         </div>
 
-        {/* Card */}
-        <div className="bg-white rounded-2xl shadow-2xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div className="space-y-1.5">
-              <Label className="text-gray-700 font-medium">Email</Label>
+        <form onSubmit={handleSubmit} className="bg-zinc-900 rounded-lg border border-zinc-800 p-5 space-y-4">
+          <div className="space-y-1.5">
+            <label htmlFor="email" className="text-sm font-medium text-zinc-300">Email</label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="admin@bookngo.tn"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="h-10 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm focus:border-indigo-500/50 focus:ring-indigo-500/20"
+              required
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label htmlFor="password" className="text-sm font-medium text-zinc-300">Mot de passe</label>
+            <div className="relative">
               <Input
-                type="email"
-                placeholder="admin@bookngo.tn"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="h-11 rounded-xl"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label className="text-gray-700 font-medium">Mot de passe</Label>
-              <Input
-                type="password"
+                id="password"
+                type={show ? "text" : "password"}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-11 rounded-xl"
+                className="h-10 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm focus:border-indigo-500/50 focus:ring-indigo-500/20 pr-10"
+                required
               />
+              <button
+                type="button"
+                onClick={() => setShow(!show)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+              >
+                {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
+          </div>
 
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 text-sm px-4 py-3 rounded-xl">
-                Email ou mot de passe incorrect.
-              </div>
+          {error && (
+            <div className="flex items-center gap-2 bg-red-500/10 border border-red-500/20 text-red-400 text-sm px-3 py-2 rounded-lg">
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500 shrink-0" />
+              Email ou mot de passe incorrect.
+            </div>
+          )}
+
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full h-10 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-medium transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {isPending ? (
+              <><Loader2 className="w-4 h-4 animate-spin" /> Connexion...</>
+            ) : (
+              "Se connecter"
             )}
-
-            <button
-              type="submit"
-              disabled={isPending}
-              className="w-full h-11 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-medium transition-colors disabled:opacity-50 shadow-sm"
-            >
-              {isPending ? "Connexion..." : "Se connecter"}
-            </button>
-          </form>
-        </div>
+          </button>
+        </form>
       </div>
     </div>
   );

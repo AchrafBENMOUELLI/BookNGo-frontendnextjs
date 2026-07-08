@@ -6,19 +6,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Trash2, Plus, X, Shield, User } from "lucide-react";
+import { Trash2, Plus, X, Shield, User, Mail, CalendarDays, Loader2 } from "lucide-react";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-const roleBadge = cva("inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full border", {
-  variants: {
-    role: {
-      admin: "bg-orange-50 text-orange-700 border-orange-200",
-      user:  "bg-gray-100  text-gray-600   border-gray-200",
+const roleBadge = cva(
+  "inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded border",
+  {
+    variants: {
+      role: {
+        admin: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20",
+        user: "bg-zinc-800 text-zinc-400 border-zinc-700",
+      },
     },
-  },
-  defaultVariants: { role: "user" },
-});
+    defaultVariants: { role: "user" },
+  }
+);
 
 export default function AdminUsersPage() {
   const { data: users, isLoading } = useAdminUsers();
@@ -40,9 +43,9 @@ export default function AdminUsersPage() {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-7 w-44 bg-zinc-800" />
         {Array.from({ length: 5 }).map((_, i) => (
-          <Skeleton key={i} className="h-16 w-full rounded-2xl" />
+          <Skeleton key={i} className="h-14 w-full rounded-lg bg-zinc-800" />
         ))}
       </div>
     );
@@ -52,44 +55,68 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">Utilisateurs</h1>
-          <p className="text-gray-400 text-sm mt-1">{users?.length ?? 0} utilisateurs au total</p>
+          <h1 className="text-xl font-bold text-zinc-100">Utilisateurs</h1>
+          <p className="text-sm text-zinc-500 mt-0.5">{users?.length ?? 0} comptes</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
           className={cn(
-            "flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all",
+            "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all",
             showForm
-              ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
-              : "bg-orange-500 text-white hover:bg-orange-600 shadow-sm"
+              ? "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+              : "bg-indigo-500 text-white hover:bg-indigo-600"
           )}
         >
           {showForm ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-          {showForm ? "Annuler" : "Ajouter"}
+          {showForm ? "Fermer" : "Ajouter"}
         </button>
       </div>
 
-      {/* Create Form */}
       {showForm && (
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-          <h2 className="font-semibold text-gray-800 mb-4">Nouvel utilisateur</h2>
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label className="text-gray-700 font-medium text-sm">Nom</Label>
-              <Input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="John Doe" className="h-10 rounded-xl" required />
+        <div className="bg-zinc-900 rounded-lg border border-zinc-800 p-5">
+          <div className="flex items-center gap-2.5 pb-3 mb-4 border-b border-zinc-800">
+            <div className="w-7 h-7 rounded bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+              <User className="w-3.5 h-3.5" />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-gray-700 font-medium text-sm">Email</Label>
-              <Input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="john@example.com" className="h-10 rounded-xl" required />
+            <p className="text-sm font-medium text-zinc-200">Nouvel utilisateur</p>
+          </div>
+          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label className="text-xs font-medium text-zinc-300">Nom</Label>
+              <Input
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="John Doe"
+                className="h-9 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm"
+                required
+              />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-gray-700 font-medium text-sm">Mot de passe</Label>
-              <Input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} placeholder="••••••••" className="h-10 rounded-xl" required />
+            <div className="space-y-1">
+              <Label className="text-xs font-medium text-zinc-300">Email</Label>
+              <Input
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                placeholder="john@exemple.com"
+                className="h-9 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm"
+                required
+              />
             </div>
-            <div className="space-y-1.5">
-              <Label className="text-gray-700 font-medium text-sm">Rôle</Label>
+            <div className="space-y-1">
+              <Label className="text-xs font-medium text-zinc-300">Mot de passe</Label>
+              <Input
+                type="password"
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                placeholder="••••••••"
+                className="h-9 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 placeholder:text-zinc-500 text-sm"
+                required
+              />
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs font-medium text-zinc-300">Rôle</Label>
               <Select value={form.role} onValueChange={(val) => setForm({ ...form, role: val })}>
-                <SelectTrigger className="h-10 rounded-xl">
+                <SelectTrigger className="h-9 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -98,59 +125,72 @@ export default function AdminUsersPage() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="col-span-2">
+            <div className="col-span-2 pt-1">
               <button
                 type="submit"
                 disabled={isCreating}
-                className="w-full h-10 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50"
+                className="w-full h-9 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg text-sm font-medium transition-all disabled:opacity-50 flex items-center justify-center gap-2"
               >
-                {isCreating ? "Création..." : "Créer l'utilisateur"}
+                {isCreating ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Création...</> : "Créer l'utilisateur"}
               </button>
             </div>
           </form>
         </div>
       )}
 
-      {/* Table */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-zinc-900 rounded-lg border border-zinc-800 overflow-hidden">
+        <table className="w-full">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-100">
-              {["Utilisateur", "Email", "Rôle", "Membre depuis", "Actions"].map((h) => (
-                <th key={h} className="text-left px-6 py-4 font-semibold text-gray-500 text-xs uppercase tracking-wide">
+            <tr className="border-b border-zinc-800">
+              {["Utilisateur", "Email", "Rôle", "Inscription", ""].map((h) => (
+                <th key={h} className="text-left px-5 py-3 text-xs font-medium text-zinc-500 uppercase tracking-wider">
                   {h}
                 </th>
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-50">
+          <tbody className="divide-y divide-zinc-800">
             {users?.map((user: any) => (
-              <tr key={user.id} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4">
+              <tr key={user.id} className="group hover:bg-zinc-800/20 transition-colors">
+                <td className="px-5 py-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xs font-bold shrink-0">
+                    <div
+                      className={cn(
+                        "w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0",
+                        user.role === "admin" ? "bg-indigo-500/10 text-indigo-400" : "bg-zinc-800 text-zinc-400"
+                      )}
+                    >
                       {user.name?.[0]?.toUpperCase()}
                     </div>
-                    <p className="font-semibold text-gray-800">{user.name}</p>
+                    <p className="text-sm font-medium text-zinc-200">{user.name}</p>
                   </div>
                 </td>
-                <td className="px-6 py-4 text-gray-500">{user.email}</td>
-                <td className="px-6 py-4">
+                <td className="px-5 py-3">
+                  <div className="flex items-center gap-1.5 text-sm text-zinc-400">
+                    <Mail className="w-3.5 h-3.5 text-zinc-500 shrink-0" />
+                    {user.email}
+                  </div>
+                </td>
+                <td className="px-5 py-3">
                   <div className={cn(roleBadge({ role: user.role }))}>
-                    {user.role === "admin"
-                      ? <><Shield className="w-3 h-3" /> Administrateur</>
-                      : <><User className="w-3 h-3" /> Utilisateur</>
-                    }
+                    {user.role === "admin" ? (
+                      <><Shield className="w-3 h-3" /> Admin</>
+                    ) : (
+                      <><User className="w-3 h-3" /> Utilisateur</>
+                    )}
                   </div>
                 </td>
-                <td className="px-6 py-4 text-gray-400 text-xs">
-                  {new Date(user.created_at).toLocaleDateString("fr-FR")}
+                <td className="px-5 py-3 text-xs text-zinc-500">
+                  <div className="flex items-center gap-1.5">
+                    <CalendarDays className="w-3.5 h-3.5 shrink-0" />
+                    {new Date(user.created_at).toLocaleDateString("fr-FR")}
+                  </div>
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-5 py-3 text-right">
                   <button
                     disabled={isDeleting || user.role === "admin"}
                     onClick={() => deleteUser(user.id)}
-                    className="p-2 rounded-lg text-red-400 hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                    className="p-1.5 rounded text-zinc-600 hover:text-red-400 hover:bg-red-500/10 transition-all disabled:opacity-30 disabled:cursor-not-allowed opacity-0 group-hover:opacity-100"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

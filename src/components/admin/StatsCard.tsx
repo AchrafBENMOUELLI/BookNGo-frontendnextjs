@@ -5,42 +5,45 @@ interface StatsCardProps {
   title: string;
   value: number | string;
   icon: React.ReactNode;
-  color?: "blue" | "orange" | "green" | "red";
+  color?: "indigo" | "teal" | "emerald" | "red";
 }
 
-const iconVariants = cva("p-3 rounded-xl", {
+const box = cva(
+  "rounded-lg bg-zinc-900 border border-zinc-800 p-4 transition-all hover:border-zinc-700",
+  {
+    variants: {
+      color: {
+        indigo: "",
+        teal: "",
+        emerald: "",
+        red: "",
+      },
+    },
+    defaultVariants: { color: "indigo" },
+  }
+);
+
+const iconBox = cva("w-9 h-9 rounded-lg flex items-center justify-center", {
   variants: {
     color: {
-      blue:   "bg-blue-100 text-blue-600",
-      orange: "bg-orange-100 text-orange-600",
-      green:  "bg-green-100 text-green-600",
-      red:    "bg-red-100 text-red-600",
+      indigo: "bg-indigo-500/10 text-indigo-400",
+      teal: "bg-teal-500/10 text-teal-400",
+      emerald: "bg-emerald-500/10 text-emerald-400",
+      red: "bg-red-500/10 text-red-400",
     },
   },
-  defaultVariants: { color: "blue" },
+  defaultVariants: { color: "indigo" },
 });
 
-const valueVariants = cva("text-2xl font-bold mt-0.5", {
-  variants: {
-    color: {
-      blue:   "text-blue-600",
-      orange: "text-orange-600",
-      green:  "text-green-600",
-      red:    "text-red-600",
-    },
-  },
-  defaultVariants: { color: "blue" },
-});
-
-export function StatsCard({ title, value, icon, color = "blue" }: StatsCardProps) {
+export function StatsCard({ title, value, icon, color = "indigo" }: StatsCardProps) {
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex items-center gap-4 hover:shadow-md transition-shadow duration-200">
-      <div className={cn(iconVariants({ color }))}>
-        {icon}
-      </div>
-      <div>
-        <p className="text-sm text-gray-500 font-medium">{title}</p>
-        <p className={cn(valueVariants({ color }))}>{value}</p>
+    <div className={cn(box({ color }))}>
+      <div className="flex items-center justify-between">
+        <div className="space-y-0.5">
+          <p className="text-xs text-zinc-500">{title}</p>
+          <p className="text-xl font-semibold text-zinc-100">{value}</p>
+        </div>
+        <div className={cn(iconBox({ color }))}>{icon}</div>
       </div>
     </div>
   );
