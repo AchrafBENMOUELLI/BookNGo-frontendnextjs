@@ -81,9 +81,9 @@ export default function AdminNewHotelPage() {
                 <SelectTrigger className="h-9 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 text-sm">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-zinc-900 border-zinc-700">
                   {[1, 2, 3, 4, 5].map((s) => (
-                    <SelectItem key={s} value={String(s)}>{"⭐".repeat(s)}</SelectItem>
+                    <SelectItem key={s} value={String(s)} className="text-zinc-200 focus:bg-zinc-800 focus:text-zinc-100">{"⭐".repeat(s)}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>

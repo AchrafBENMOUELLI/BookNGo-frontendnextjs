@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useHotel } from "@/hooks/useHotels";
 import { useCreateReservation } from "@/hooks/useReservation";
@@ -58,8 +59,16 @@ export default function ReservePage() {
         )
       : 0;
 
+  const [selectedFormuleId, setSelectedFormuleId] = useState("none");
+
+  const selectedFormule = hotel?.formules?.find((f: any) => f.id === Number(selectedFormuleId));
+
+  const formulePrice = selectedFormule
+    ? (selectedFormule.promotion > 0 ? selectedFormule.prix_avec_promotion : selectedFormule.prix_formule) * nights
+    : 0;
+
   const basePrice = hotel?.prix_unitaire ?? 0;
-  const totalPrice = basePrice * nights * nbrChambre;
+  const totalPrice = basePrice * nights * nbrChambre + formulePrice;
 
   const onSubmit = (data: ReservationFormData) => {
     if (!user || !hotel) return;
@@ -72,7 +81,7 @@ export default function ReservePage() {
         date_depart: data.date_depart,
         nombre_adultes: data.nombre_adultes,
         nombre_enfants: data.nombre_enfants,
-        formule: data.formule ?? null,
+        formule: selectedFormule ? selectedFormule.formule : null,
         nbr_chambre: data.nbr_chambre,
         prix: totalPrice,
         etat: "en_attente",
@@ -197,19 +206,19 @@ export default function ReservePage() {
             {hotel.formules && hotel.formules.length > 0 && (
               <div className="space-y-1">
                 <Label>Formule</Label>
-                <Select onValueChange={(val) => setValue("formule", val)}>
+                <Select value={selectedFormuleId} onValueChange={(val) => setSelectedFormuleId(val)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Choisir une formule" />
                   </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="none">Sans formule</SelectItem>
-                    {hotel.formules.map((f) => (
-                      <SelectItem key={f.id} value={f.formule}>
+                  <SelectContent position="popper" className="bg-white border-zinc-200">
+                    <SelectItem value="none" className="text-zinc-600 focus:bg-zinc-100">Sans formule</SelectItem>
+                    {hotel.formules.map((f: any) => (
+                      <SelectItem key={f.id} value={String(f.id)} className="text-zinc-700 focus:bg-zinc-100">
                         {f.formule} —{" "}
-                        {f.promotion && f.promotion > 0
+                        {f.promotion > 0
                           ? f.prix_avec_promotion
                           : f.prix_formule}{" "}
-                        TND
+                        TND / nuit
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -226,7 +235,16 @@ export default function ReservePage() {
               <span>
                 {basePrice} TND × {nights} nuit(s) × {nbrChambre} chambre(s)
               </span>
+              <span>{basePrice * nights * nbrChambre} TND</span>
             </div>
+            {selectedFormule && (
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>
+                  Formule {selectedFormule.formule} × {nights} nuit(s)
+                </span>
+                <span>{formulePrice} TND</span>
+              </div>
+            )}
             <div className="flex justify-between font-bold text-lg">
               <span>Total</span>
               <span className="text-primary">{totalPrice} TND</span>

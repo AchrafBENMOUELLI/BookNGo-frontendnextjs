@@ -105,3 +105,26 @@ export function useAdminDeleteUser() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-users"] }),
   });
 }
+
+export function useAdminFormules() {
+  return useQuery({
+    queryKey: ["admin-formules"],
+    queryFn: () => adminService.getFormules(),
+  });
+}
+
+export function useAdminCreateFormule() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: any) => adminService.createFormule(data),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-formules"] }),
+  });
+}
+
+export function useAdminDeleteFormule() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: number) => adminService.deleteFormule(id),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["admin-formules"] }),
+  });
+}

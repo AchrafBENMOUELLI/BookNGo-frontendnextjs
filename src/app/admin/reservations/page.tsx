@@ -96,13 +96,13 @@ export default function AdminReservationsPage() {
                 <td className="px-5 py-3 text-sm font-semibold text-zinc-200 tabular-nums">{r.prix} TND</td>
                 <td className="px-5 py-3">
                   <Select value={r.etat} onValueChange={(val) => updateStatus({ id: r.id, etat: val })}>
-                    <SelectTrigger className="w-[130px] h-7 rounded bg-zinc-800 border-zinc-700 text-xs">
-                      <div className={cn(badgeEtat({ etat: r.etat }))}>{etatLabels[r.etat]}</div>
+                    <SelectTrigger className="w-[130px] h-7 rounded bg-zinc-800 border-zinc-700 text-xs [&_svg]:text-zinc-500">
+                      <span className={cn(badgeEtat({ etat: r.etat }))}>{etatLabels[r.etat]}</span>
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="en_attente">En attente</SelectItem>
-                      <SelectItem value="confirmee">Confirmée</SelectItem>
-                      <SelectItem value="annulee">Annulée</SelectItem>
+                    <SelectContent position="popper" className="bg-zinc-900 border-zinc-700 min-w-[130px]">
+                      <SelectItem value="en_attente" className="text-amber-400 focus:bg-zinc-800 focus:text-amber-300">En attente</SelectItem>
+                      <SelectItem value="confirmee" className="text-emerald-400 focus:bg-zinc-800 focus:text-emerald-300">Confirmée</SelectItem>
+                      <SelectItem value="annulee" className="text-red-400 focus:bg-zinc-800 focus:text-red-300">Annulée</SelectItem>
                     </SelectContent>
                   </Select>
                 </td>

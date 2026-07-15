@@ -119,9 +119,9 @@ export default function AdminUsersPage() {
                 <SelectTrigger className="h-9 rounded-lg bg-zinc-800 border-zinc-700 text-zinc-100 text-sm">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="user">Utilisateur</SelectItem>
-                  <SelectItem value="admin">Administrateur</SelectItem>
+                <SelectContent position="popper" className="bg-zinc-900 border-zinc-700">
+                  <SelectItem value="user" className="text-zinc-200 focus:bg-zinc-800 focus:text-zinc-100">Utilisateur</SelectItem>
+                  <SelectItem value="admin" className="text-zinc-200 focus:bg-zinc-800 focus:text-zinc-100">Administrateur</SelectItem>
                 </SelectContent>
               </Select>
             </div>

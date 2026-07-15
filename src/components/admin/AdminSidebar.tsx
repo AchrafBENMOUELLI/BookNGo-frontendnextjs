@@ -6,7 +6,7 @@ import { useAdminStore } from "@/stores/admin.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
-import { LayoutDashboard, Hotel, CalendarCheck, Users, LogOut, Hexagon } from "lucide-react";
+import { LayoutDashboard, Hotel, CalendarCheck, Users, Tag, LogOut, Hexagon } from "lucide-react";
 
 const navItem = cva(
   "flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-150",
@@ -26,6 +26,7 @@ const links = [
   { label: "Hôtels", href: "/admin/hotels", icon: Hotel },
   { label: "Réservations", href: "/admin/reservations", icon: CalendarCheck },
   { label: "Utilisateurs", href: "/admin/users", icon: Users },
+  { label: "Formules", href: "/admin/formules", icon: Tag },
 ];
 
 export function AdminSidebar() {

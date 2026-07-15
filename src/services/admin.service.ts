@@ -65,4 +65,20 @@ export const adminService = {
     const res = await adminApi.delete(`/admin/users/${id}`);
     return res.data;
   },
+
+  // Formules
+  getFormules: async () => {
+    const res = await adminApi.get("/formules-tarifs");
+    return res.data.data;
+  },
+
+  createFormule: async (data: any) => {
+    const res = await adminApi.post("/formules-tarifs", data);
+    return res.data;
+  },
+
+  deleteFormule: async (id: number) => {
+    const res = await adminApi.delete(`/formules-tarifs/${id}`);
+    return res.data;
+  },
 };
