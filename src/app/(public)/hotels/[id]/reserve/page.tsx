@@ -64,7 +64,7 @@ export default function ReservePage() {
   const selectedFormule = hotel?.formules?.find((f: any) => f.id === Number(selectedFormuleId));
 
   const formulePrice = selectedFormule
-    ? (selectedFormule.promotion > 0 ? selectedFormule.prix_avec_promotion : selectedFormule.prix_formule) * nights
+    ? ((selectedFormule.promotion ?? 0) > 0 ? (selectedFormule.prix_avec_promotion ?? selectedFormule.prix_formule) : selectedFormule.prix_formule) * nights
     : 0;
 
   const basePrice = hotel?.prix_unitaire ?? 0;
