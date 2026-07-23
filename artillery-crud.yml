@@ -1,0 +1,56 @@
+config:
+  target: "http://localhost:8000"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      rampTo: 10
+      name: "Montée en charge CRUD"
+  variables:
+    token: ""
+
+scenarios:
+  - name: "Full CRUD Admin"
+    flow:
+      - post:
+          url: "/api/login"
+          json:
+            email: "benmouelliachraf@gmail.com"
+            password: "admin123"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/hotels"
+          headers:
+            Authorization: "Bearer {{ token }}"
+      - post:
+          url: "/api/hotels"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            nom: "Hôtel Test {{ $randomInt(1,9999) }}"
+            adresse: "123 Rue Test"
+            ville: "Paris"
+            pays: "France"
+            telephone: "+33123456789"
+            email: "hotel{{ $randomInt(1,9999) }}@test.com"
+            description: "Test"
+            note: 4
+          capture:
+            - json: "$.data.id"
+              as: "hotelId"
+      - put:
+          url: "/api/hotels/{{ hotelId }}"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            nom: "Hôtel Modifié"
+            note: 5
+      - get:
+          url: "/api/hotels/{{ hotelId }}"
+          headers:
+            Authorization: "Bearer {{ token }}"
+      - delete:
+          url: "/api/hotels/{{ hotelId }}"
+          headers:
+            Authorization: "Bearer {{ token }}"

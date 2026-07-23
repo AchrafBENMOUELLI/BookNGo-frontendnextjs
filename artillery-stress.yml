@@ -1,0 +1,31 @@
+config:
+  target: "http://localhost:8000"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+      rampTo: 20
+      name: "Montée en charge progressive (1→20 VU/s)"
+    - duration: 10
+      arrivalRate: 20
+      name: "Palier à 20 VU/s pendant 10s"
+    - duration: 10
+      arrivalRate: 50
+      name: "Pic à 50 VU/s"
+  variables:
+    adminToken: ""
+
+scenarios:
+  - name: "Login + Liste hôtels"
+    flow:
+      - post:
+          url: "/api/login"
+          json:
+            email: "benmouelliachraf@gmail.com"
+            password: "admin123"
+          capture:
+            - json: "$.token"
+              as: "adminToken"
+      - get:
+          url: "/api/hotels"
+          headers:
+            Authorization: "Bearer {{ adminToken }}"

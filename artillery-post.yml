@@ -1,0 +1,40 @@
+config:
+  target: "http://localhost:8000"
+  phases:
+    - duration: 10
+      arrivalRate: 2
+  variables:
+    adminToken: ""
+    userToken: ""
+scenarios:
+  - name: "Login admin et lister les hôtels"
+    flow:
+      - post:
+          url: "/api/login"
+          json:
+            email: "benmouelliachraf@gmail.com"
+            password: "admin123"
+          capture:
+            - json: "$.token"
+              as: "adminToken"
+      - get:
+          url: "/api/hotels"
+          headers:
+            Authorization: "Bearer {{ adminToken }}"
+
+  - name: "Register nouveau client et réserver"
+    flow:
+      - post:
+          url: "/api/register"
+          json:
+            name: "Test User"
+            email: "test{{ $randomInt(1,9999) }}@test.com"
+            password: "password123"
+            password_confirmation: "password123"
+          capture:
+            - json: "$.token"
+              as: "userToken"
+      - get:
+          url: "/api/hotels"
+          headers:
+            Authorization: "Bearer {{ userToken }}"

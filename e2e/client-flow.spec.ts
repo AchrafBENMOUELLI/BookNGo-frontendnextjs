@@ -59,7 +59,7 @@ test.describe.serial('Parcours authentifié', () => {
   });
 
   test('Se connecter', async ({ page }) => {
-    await page.goto('/login');
+    await page.goto('.');
     await page.waitForLoadState('networkidle');
 
     await page.fill('#email', testUser.email);
